@@ -18,13 +18,11 @@ def generate_unique_email():
     email = f"{login}@{domain}"
     return email
 
-def test_successful_registration():
-    driver = webdriver.Chrome()
+def test_successful_registration(driver):
     driver.get(Urls.registration_page)
     email = generate_unique_email()
     driver.find_element(*RegisterPageLocators.FIELD_NAME).send_keys("Алексей")
     driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(email)
-    print(email)
     driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys("12345678")
     driver.find_element(*RegisterPageLocators.BUTTON_REGISTER).click()
 
@@ -32,15 +30,13 @@ def test_successful_registration():
 
     assert driver.current_url == Urls.login_page
 
-    driver.quit()
 
-def test_registration_incorrect_password():
-    driver = webdriver.Chrome()
+
+def test_registration_incorrect_password(driver):
     driver.get(Urls.registration_page)
     email = generate_unique_email()
     driver.find_element(*RegisterPageLocators.FIELD_NAME).send_keys("Алексей")
     driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(email)
-    print(email)
     driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys("12345")
     driver.find_element(*RegisterPageLocators.BUTTON_REGISTER).click()
 
@@ -49,4 +45,34 @@ def test_registration_incorrect_password():
 
     assert error_message.text == 'Некорректный пароль'
 
-    driver.quit()
+
+def test_registration_existing_user(driver):
+    driver.get(Urls.registration_page)
+    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(RegisterPageLocators.FIELD_NAME))
+        
+    test_email = generate_unique_email()
+
+    driver.find_element(*RegisterPageLocators.FIELD_NAME).send_keys("Алексей")
+    driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(test_email)
+    driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys("12345678")
+    driver.find_element(*RegisterPageLocators.BUTTON_REGISTER).click()
+    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located((By.XPATH, ".//h2[text()='Вход']")))
+
+    driver.get(Urls.registration_page)
+    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(RegisterPageLocators.FIELD_NAME))
+    driver.find_element(*RegisterPageLocators.FIELD_NAME).send_keys("Ольга")
+    driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(test_email)
+    driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys("0987654321")
+    driver.find_element(*RegisterPageLocators.BUTTON_REGISTER).click()
+    WebDriverWait(driver, 3).until(expected_conditions.visibility_of_any_elements_located(RegisterPageLocators.ERROR_USER_EXISTING))
+    error = driver.find_element(*RegisterPageLocators.ERROR_USER_EXISTING).text
+
+    assert error == 'Такой пользователь уже существует' 
+
+
+
+
+
+
+
+
