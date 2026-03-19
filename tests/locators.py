@@ -19,3 +19,7 @@ class RegisterPageLocators:
     ERROR_INCORRECT_PASSWORD = (By.XPATH, ".//p[text()='Некорректный пароль']") # Ошибка "Некорректный пароль"
     ERROR_USER_EXISTING  = (By.XPATH, ".//p[text()='Такой пользователь уже существует']") # Ошибка "Такой пользователь уже существует"
 
+
+class MainPageLocators:
+    BUTTON_LOGIN = (By.XPATH, ".//button[text() = 'Войти в аккаунт']") #Кнопка войти в аккаунт
+
