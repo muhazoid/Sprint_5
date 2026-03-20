@@ -29,7 +29,9 @@ class MainPageLocators:
     TAB_BUNS = (By.XPATH, './/span[text()="Булки"]/parent::*')
     TAB_SAUCES = (By.XPATH, './/span[text()="Соусы"]/parent::*')
     TAB_FILLINGS = (By.XPATH, './/span[text()="Начинки"]/parent::*')
+    TAB_ACTIVE = (By.XPATH, './/div[contains(@class, "tab_tab_type_current")]')
     LOGO = (By.XPATH, './/div[@class="AppHeader_header__logo__2D0X2"]')
+    
    
 
 class LoginPage:
@@ -47,4 +49,3 @@ class ProfilePageLocators:
     LOGOUT_BUTTON = (By.XPATH, ".//button[text()='Выход']")  # Кнопка "Выйти"
     PROFILE_LINK = (By.XPATH, ".//a[text()='Профиль']")  # Ссылка на профиль (активная)
 
-    
