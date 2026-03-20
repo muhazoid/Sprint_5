@@ -2,58 +2,53 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-import random
-from locators import RegisterPageLocators, Urls
-from helpers import generate_unique_email
+from locators import RegisterPageLocators, Urls, LoginPage
+from helpers import generate_unique_email, TestData
 
 
 
 
-def test_successful_registration(driver):
+def test_register_valid_user_success(driver):
     driver.get(Urls.registration_page)
-    email = generate_unique_email()
-    driver.find_element(*RegisterPageLocators.FIELD_NAME).send_keys("Алексей")
-    driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(email)
-    driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys("12345678")
+    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(RegisterPageLocators.FIELD_NAME))
+    driver.find_element(*RegisterPageLocators.FIELD_NAME).send_keys(TestData.USER_NAME)
+    driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(generate_unique_email())
+    driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys(TestData.LOGIN_PASSWORD)
     driver.find_element(*RegisterPageLocators.BUTTON_REGISTER).click()
-
-    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located((By.XPATH, ".//h2[text()='Вход']")))
+    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(LoginPage.TITLE_TEXT))
 
     assert driver.current_url == Urls.login_page
 
 
 
-def test_registration_incorrect_password(driver):
+def test_register_invalid_password_show_error(driver):
     driver.get(Urls.registration_page)
-    email = generate_unique_email()
-    driver.find_element(*RegisterPageLocators.FIELD_NAME).send_keys("Алексей")
-    driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(email)
+    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(RegisterPageLocators.FIELD_NAME))
+    driver.find_element(*RegisterPageLocators.FIELD_NAME).send_keys(TestData.USER_NAME)
+    driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(generate_unique_email())
     driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys("12345")
     driver.find_element(*RegisterPageLocators.BUTTON_REGISTER).click()
-
     WebDriverWait(driver, 5).until(expected_conditions.presence_of_element_located(RegisterPageLocators.ERROR_INCORRECT_PASSWORD))
     error_message = driver.find_element(*RegisterPageLocators.ERROR_INCORRECT_PASSWORD)
 
     assert error_message.text == 'Некорректный пароль'
 
 
-def test_registration_existing_user(driver):
+def test_register_existing_user_show_error(driver):
     driver.get(Urls.registration_page)
     WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(RegisterPageLocators.FIELD_NAME))
-        
     test_email = generate_unique_email()
-
-    driver.find_element(*RegisterPageLocators.FIELD_NAME).send_keys("Алексей")
+    driver.find_element(*RegisterPageLocators.FIELD_NAME).send_keys(TestData.USER_NAME)
     driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(test_email)
     driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys("12345678")
     driver.find_element(*RegisterPageLocators.BUTTON_REGISTER).click()
-    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located((By.XPATH, ".//h2[text()='Вход']")))
+    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(LoginPage.TITLE_TEXT))
 
     driver.get(Urls.registration_page)
     WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(RegisterPageLocators.FIELD_NAME))
     driver.find_element(*RegisterPageLocators.FIELD_NAME).send_keys("Ольга")
     driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(test_email)
-    driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys("0987654321")
+    driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys(TestData.LOGIN_PASSWORD)
     driver.find_element(*RegisterPageLocators.BUTTON_REGISTER).click()
     WebDriverWait(driver, 3).until(expected_conditions.visibility_of_any_elements_located(RegisterPageLocators.ERROR_USER_EXISTING))
     error = driver.find_element(*RegisterPageLocators.ERROR_USER_EXISTING).text
