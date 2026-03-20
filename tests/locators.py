@@ -18,8 +18,21 @@ class RegisterPageLocators:
     BUTTON_REGISTER = (By.XPATH, ".//button[text()='Зарегистрироваться']") # Кнопка "Зарегистрироваться"
     ERROR_INCORRECT_PASSWORD = (By.XPATH, ".//p[text()='Некорректный пароль']") # Ошибка "Некорректный пароль"
     ERROR_USER_EXISTING  = (By.XPATH, ".//p[text()='Такой пользователь уже существует']") # Ошибка "Такой пользователь уже существует"
+    TEXT_LOGIN = (By.CLASS_NAME, 'Auth_link__1fOlj')
 
 
 class MainPageLocators:
     BUTTON_LOGIN = (By.XPATH, ".//button[text() = 'Войти в аккаунт']") #Кнопка войти в аккаунт
+    BUTTON_ORDER = (By.XPATH, './/button[text()="Оформить заказ"]')
+    TEXT_PROFILE = (By.XPATH, './/p[text()="Личный Кабинет"]')
+    TEXT_CONSTRUCTOR = (By.XPATH, './/p[text()="Конструктор"]')
+    TAB_BUNS = (By.XPATH, './/span[text()="Булки"]/parent::*')
+    TAB_SAUCES = (By.XPATH, './/span[text()="Соусы"]/parent::*')
+    TAB_FILLINGS = (By.XPATH, './/span[text()="Начинки"]/parent::*')
+   
 
+class LoginPage:
+    TITLE_TEXT = (By.XPATH, './/h2[text()="Вход"]')
+    BUTTON_LOGIN = (By.XPATH, './/button[text()="Войти"]')
+    FIELD_EMAIL = (By.XPATH, './/label[text()="Email"]//parent::*/input')
+    FIELD_PASSWORD = (By.XPATH, './/input[@type="password"]')

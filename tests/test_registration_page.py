@@ -4,19 +4,10 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 import random
 from locators import RegisterPageLocators, Urls
+from helpers import generate_unique_email
 
 
 
-def generate_unique_email():
-    first_name = "alexey"
-    last_name = "chikichev" 
-    cohort = "42"
-    random_digits = str(random.randint(100, 999))
-    login = f"{first_name}_{last_name}_{cohort}_{random_digits}"
-    domains = ["yandex.ru", "ya.ru", "gmail.com", "mail.ru"]
-    domain = random.choice(domains)
-    email = f"{login}@{domain}"
-    return email
 
 def test_successful_registration(driver):
     driver.get(Urls.registration_page)
