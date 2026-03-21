@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from locators import MainPageLocators, Urls, LoginPage, RegisterPageLocators, RecoverPageLocators
-from helpers import TestData
+from data import TestData
 
 
 def test_login_main_button_valid_credentials_success(driver):

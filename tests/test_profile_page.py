@@ -1,7 +1,7 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from locators import MainPageLocators, Urls, LoginPage, ProfilePageLocators
-from helpers import TestData
+from data import TestData
 
 
 

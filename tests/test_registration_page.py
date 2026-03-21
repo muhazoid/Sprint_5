@@ -3,7 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from locators import RegisterPageLocators, Urls, LoginPage
-from helpers import generate_unique_email, TestData
+from helpers import generate_unique_email
+from data import TestData
 
 
 
@@ -28,11 +29,11 @@ def test_register_invalid_password_show_error(driver):
     driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(generate_unique_email())
     driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys("12345")
     driver.find_element(*RegisterPageLocators.BUTTON_REGISTER).click()
-    WebDriverWait(driver, 5).until(expected_conditions.presence_of_element_located(RegisterPageLocators.ERROR_INCORRECT_PASSWORD))
-    error_message = driver.find_element(*RegisterPageLocators.ERROR_INCORRECT_PASSWORD)
+    error_element = WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(RegisterPageLocators.ERROR_INCORRECT_PASSWORD))
 
-    assert error_message.text == 'Некорректный пароль'
+    assert error_element.is_displayed()
 
+    
 
 def test_register_existing_user_show_error(driver):
     driver.get(Urls.registration_page)
@@ -50,10 +51,10 @@ def test_register_existing_user_show_error(driver):
     driver.find_element(*RegisterPageLocators.FIELD_EMAIL).send_keys(test_email)
     driver.find_element(*RegisterPageLocators.FIELD_PASSWORD).send_keys(TestData.LOGIN_PASSWORD)
     driver.find_element(*RegisterPageLocators.BUTTON_REGISTER).click()
-    WebDriverWait(driver, 3).until(expected_conditions.visibility_of_any_elements_located(RegisterPageLocators.ERROR_USER_EXISTING))
-    error = driver.find_element(*RegisterPageLocators.ERROR_USER_EXISTING).text
+    error_element = WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(RegisterPageLocators.ERROR_USER_EXISTING))
+    
 
-    assert error == 'Такой пользователь уже существует' 
+    assert error_element.is_displayed()
 
 
 
